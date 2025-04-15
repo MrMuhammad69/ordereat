@@ -57,8 +57,8 @@ A React Native mobile application for browsing and discovering delicious recipes
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/meals-app.git
-cd meals-app
+git clone https://github.com/MrMuhammad69/ordereat.git
+cd ordereat
 ```
 
 2. Install dependencies:
