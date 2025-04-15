@@ -1,26 +1,37 @@
 import CategoryGridTile from '@/components/CategoryGridTile'
 import { CATEGORIES } from '@/data'
 import Category from '@/models/category'
-import { router } from 'expo-router'
-import React, { useCallback } from 'react'
+import { router, useNavigation } from 'expo-router'
+import React, { useCallback, useLayoutEffect } from 'react'
 import { FlatList, View, ListRenderItemInfo, StyleSheet, Text } from 'react-native'
 
 const CategoriesScreen = () => {
+  const navigation = useNavigation()
   const renderCategoryItem = useCallback(({ item }: ListRenderItemInfo<Category>) => {
     const handlePress = () => {
-      router.push(`/meals-overview/${item.id}`)
+      router.push({
+        pathname: `/meals-overview/${item.id}`,
+        params: { title: item.title }
+      })
     }
+   
     
     return (
       <CategoryGridTile 
-        {...item} 
+        id={item.id}
+        title={item.title}
+        imageUrl={item.imageUrl}
+        onPress={handlePress}
       />
     )
   }, [])
-
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Home',
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Categories</Text>
       <FlatList 
         numColumns={2} 
         data={CATEGORIES} 
@@ -31,6 +42,10 @@ const CategoriesScreen = () => {
       />
     </View>
   )
+}
+
+CategoriesScreen.options = {
+  title: 'Categories'
 }
 
 const styles = StyleSheet.create({

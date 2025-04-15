@@ -1,6 +1,6 @@
 import { MEALS } from "@/data";
-import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons, MaterialCommunityIcons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
@@ -8,6 +8,21 @@ import { Ionicons, MaterialCommunityIcons, MaterialIcons, FontAwesome } from '@e
 export default function MealDetails() {
     const { id } = useLocalSearchParams();
     const [meal, setMeal] = useState(null);
+    const navigation = useNavigation()
+
+    useEffect(() => {
+        const foundMeal = MEALS.find((meal) => meal.id === id);
+        setMeal(foundMeal);
+    }, [id]);
+
+    // Move useLayoutEffect before any conditional returns
+    useLayoutEffect(() => {
+        if (meal) {
+            navigation.setOptions({
+                title: meal.title,
+            });
+        }
+    }, [navigation, meal]);
 
     useEffect(() => {
         const foundMeal = MEALS.find((meal) => meal.id === id);
@@ -21,7 +36,6 @@ export default function MealDetails() {
             </View>
         );
     }
-
     return (
         <ScrollView style={styles.container}>
             <Image source={{ uri: meal.imageUrl }} style={styles.image} />
@@ -61,7 +75,7 @@ export default function MealDetails() {
                     )}
                     {meal.isVegetarian && (
                         <View style={styles.dietaryItem}>
-                            <Ionicons name="md-leaf" size={16} color="#4CAF50" />
+                            <Ionicons name="leaf" size={16} color="#4CAF50" />
                             <Text style={styles.dietaryText}>Vegetarian</Text>
                         </View>
                     )}

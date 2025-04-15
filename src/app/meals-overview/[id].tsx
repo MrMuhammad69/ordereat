@@ -1,10 +1,12 @@
 import { CATEGORIES, MEALS } from "@/data";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from "expo-router";
+import { useLayoutEffect } from "react";
 
-export default function MealsOverview() {
+const MealsOverview = () => {
+    const navigation = useNavigation()
     const { id } = useLocalSearchParams();
     
     // Filter meals that belong to this category
@@ -18,10 +20,14 @@ export default function MealsOverview() {
             </View>
         );
     }
+    useLayoutEffect(() => {
+        navigation.setOptions({
+          title: category.title,
+        });
+      }, [navigation]);
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>{category.title}</Text>
             <View style={styles.gridContainer}>
                 {categoryMeals.map((meal) => (
                     <Link 
@@ -58,6 +64,10 @@ export default function MealsOverview() {
         </ScrollView>
     );
 }
+
+MealsOverview.options = ({ route }) => ({
+    title: route.params?.title || 'Meals'
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -103,14 +113,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         borderRadius: 12,
     },
-    title: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: '#FFFFFF',
-        marginLeft: 20,
-        marginBottom: 10,
-        marginTop: 10,
-      },
     metaText: {
         fontSize: 12,
         color: '#FF6B00',
@@ -124,3 +126,5 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
 });
+
+export default MealsOverview;

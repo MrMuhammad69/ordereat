@@ -1,9 +1,14 @@
-import Category from '@/models/category'
-import { router } from 'expo-router'
 import React from 'react'
 import { Pressable, StyleSheet, Text, View, Image } from 'react-native'
 
-const CategoryGridTile = ({ id, imageUrl, title }: Category) => {
+interface CategoryGridTileProps {
+  id: string;
+  title: string;
+  imageUrl: string;
+  onPress: () => void;
+}
+
+const CategoryGridTile: React.FC<CategoryGridTileProps> = ({ id, imageUrl, title, onPress }) => {
   return (
     <View style={styles.outerView}>
       <Pressable 
@@ -12,9 +17,7 @@ const CategoryGridTile = ({ id, imageUrl, title }: Category) => {
           pressed && styles.buttonPressed
         ]}
         android_ripple={{ color: '#ccc' }}
-        onPress={() => {
-          router.navigate(`/meals-overview/${id}`)
-        }}
+        onPress={onPress}
       >
         <Image 
           source={{ uri: imageUrl }} 
