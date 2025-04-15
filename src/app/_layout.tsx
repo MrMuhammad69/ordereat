@@ -1,6 +1,13 @@
+import React from "react";
 import "../global.css";
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
+import { StatusBar } from "react-native";
 
 export default function Layout() {
-  return <Slot />;
+  return (
+    <>
+      <StatusBar barStyle="light-content" />
+      <Stack screenOptions={{headerShown: false}}  />
+    </>
+  );
 }
