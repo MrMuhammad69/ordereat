@@ -1,24 +1,26 @@
 import Category from '@/models/category'
 import { router } from 'expo-router'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View, PressableProps } from 'react-native'
+import { Pressable, StyleSheet, Text, View, Image } from 'react-native'
 
-
-const CategoryGridTile = ({ id,color, title }: Category) => {
+const CategoryGridTile = ({ id, imageUrl, title }: Category) => {
   return (
-    <View style={[styles.outerView, { backgroundColor: color }]}>
+    <View style={styles.outerView}>
       <Pressable 
         style={({ pressed }) => [
           styles.button,
           pressed && styles.buttonPressed
-        ]} className='flex-1'
-
+        ]}
         android_ripple={{ color: '#ccc' }}
-        onPress={()=> {
+        onPress={() => {
           router.navigate(`/meals-overview/${id}`)
         }}
       >
-        <View style={styles.innerView}>
+        <Image 
+          source={{ uri: imageUrl }} 
+          style={styles.image}
+        />
+        <View style={styles.overlay}>
           <Text style={styles.title}>
             {title}
           </Text>
@@ -33,13 +35,14 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 8,
     height: 150,
-    borderRadius: 8,
+    borderRadius: 12,
     elevation: 4,
     shadowColor: 'black',
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
     overflow: 'hidden',
+    backgroundColor: '#1E1E1E',
   },
   button: {
     flex: 1,
@@ -47,11 +50,18 @@ const styles = StyleSheet.create({
   buttonPressed: {
     opacity: 0.5,
   },
-  innerView: {
-    flex: 1,
-    padding: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  overlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 12,
   },
   title: {
     fontWeight: 'bold',
